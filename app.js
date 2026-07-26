@@ -272,10 +272,10 @@ currentPickList.forEach((row) => {
 
    // Item name
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.text(row.item, 28, y + 4);
+  doc.setFontSize(15);
+  doc.text(row.item, 28, y + 2);
 
-   doc.setFontSize(12);
+   doc.setFontSize(13);
   doc.text(String(row.toAdd), 145, y + 2);
 
 
@@ -306,6 +306,19 @@ doc.text(
   y + 13
 );
 
-doc.output("dataurlnewwindow");
+const pdfUrl = URL.createObjectURL(doc.output("blob"));
+const printFrame = document.createElement("iframe");
+
+printFrame.style.display = "none";
+printFrame.src = pdfUrl;
+printFrame.onload = () => {
+  printFrame.contentWindow.addEventListener("afterprint", () => {
+    URL.revokeObjectURL(pdfUrl);
+    printFrame.remove();
+  }, { once: true });
+  printFrame.contentWindow.print();
+};
+
+document.body.appendChild(printFrame);
 
 });
