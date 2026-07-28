@@ -102,6 +102,22 @@ button:disabled {
   text-align: left;
 }
 
+.results-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 20px;
+}
+
+.results-panel h2 {
+  margin: 0;
+  text-align: center;
+  font-size: 1.15rem;
+}
+
+.results-panel {
+  --numeric-column-width: 58px;
+}
+
 .result-item {
   background: rgba(255,255,255,0.08);
   border-radius: 10px;
@@ -124,6 +140,61 @@ button:disabled {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   overflow: hidden;
+}
+
+.results-panel .pick-table {
+  margin-top: 10px;
+}
+
+.category-summary-table th:nth-child(n+2),
+.category-summary-table td:nth-child(n+2) {
+  text-align: center;
+}
+
+.category-summary-table {
+  table-layout: fixed;
+}
+
+.category-summary-table th:first-child,
+.category-summary-table td:first-child {
+  white-space: nowrap;
+}
+
+.category-summary-table col.numeric-column {
+  width: var(--numeric-column-width);
+}
+
+.table-summary {
+  display: grid;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  color: white;
+  font-weight: 700;
+}
+
+.inventory-summary {
+  grid-template-columns: minmax(0, 1fr) 52px;
+}
+
+.inventory-summary span:last-child {
+  text-align: center;
+  font-size: 1.15rem;
+}
+
+.category-summary {
+  grid-template-columns: minmax(0, 1fr) repeat(4, var(--numeric-column-width));
+  padding: 0;
+}
+
+.category-summary span {
+  box-sizing: border-box;
+  padding: 10px 12px;
+}
+
+.category-summary span:nth-child(n+2) {
+  text-align: center;
 }
 
 .pick-table th {
@@ -150,6 +221,25 @@ button:disabled {
   font-size: 1.15rem;
 }
 
+.pick-table.category-summary-table th {
+  text-align: center;
+}
+
+.pick-table.category-summary-table th:nth-child(n+2),
+.pick-table.category-summary-table td:nth-child(n+2) {
+  text-align: center;
+}
+
+.pick-table.current-inventory-table {
+  table-layout: fixed;
+}
+
+.pick-table.current-inventory-table th:last-child,
+.pick-table.current-inventory-table td:last-child {
+  width: 52px;
+  text-align: center;
+}
+
 .pick-summary {
   margin-top: 16px;
   text-align: right;
@@ -168,4 +258,181 @@ button:disabled {
   margin-left: 35px;
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.45);
+}
+
+.print-report {
+  display: none;
+}
+
+@page {
+  size: portrait;
+  margin: 0.4in;
+}
+
+@media print {
+  body {
+    min-height: auto;
+    background: white;
+    color: black;
+  }
+
+  body > *:not(.print-report) {
+    display: none !important;
+  }
+
+  .print-report {
+    display: block;
+    box-sizing: border-box;
+    padding-top: 0.9in;
+    color: black;
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+  }
+
+  .print-title {
+    margin: 0 0 16px;
+    text-align: center;
+    font-size: 23pt;
+    font-weight: 700;
+  }
+
+  .print-technician {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+
+  .print-technician span {
+    flex: none;
+    width: 5.5in;
+    height: 26px;
+    border-bottom: 1px solid black;
+  }
+
+  .print-generated {
+    margin-bottom: 24px;
+    font-size: 9pt;
+  }
+
+  .print-summary-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: 18px;
+    align-items: start;
+  }
+
+  .print-section,
+  .print-pick-section {
+    break-inside: avoid;
+  }
+
+  .print-section h2,
+  .print-pick-section h2 {
+    margin: 0 0 7px;
+    text-align: center;
+    font-size: 12pt;
+  }
+
+  .print-section table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .print-section th,
+  .print-section td {
+    padding: 5px 7px;
+    border: 1px solid #777;
+  }
+
+  .print-section th {
+    background: #e4e4e4;
+    text-align: left;
+  }
+
+  .print-section th:last-child,
+  .print-section td:last-child {
+    width: 42px;
+    text-align: center;
+  }
+
+  .print-total {
+    display: grid;
+    margin-top: 6px;
+    border: 1px solid #777;
+    border-radius: 7px;
+    font-weight: 700;
+  }
+
+  .print-total span {
+    box-sizing: border-box;
+    padding: 5px 7px;
+  }
+
+  .print-inventory-total {
+    grid-template-columns: minmax(0, 1fr) 42px;
+  }
+
+  .print-inventory-total span:last-child {
+    text-align: center;
+  }
+
+  .print-category-table col.print-numeric-column {
+    width: 42px;
+  }
+
+  .print-category-table th,
+  .print-category-table td {
+    font-size: 8.5pt;
+  }
+
+  .print-category-table th {
+    text-align: center;
+  }
+
+  .print-category-table th:nth-child(n+2),
+  .print-category-table td:nth-child(n+2) {
+    width: 42px;
+    text-align: center;
+  }
+
+  .print-category-table td:first-child {
+    white-space: nowrap;
+  }
+
+  .print-category-total {
+    grid-template-columns: minmax(0, 1fr) repeat(4, 42px);
+  }
+
+  .print-category-total span:nth-child(n+2) {
+    text-align: center;
+  }
+
+  .print-pick-section {
+    margin-top: 18px;
+  }
+
+  .print-pick-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .print-pick-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px;
+    align-items: end;
+    margin-bottom: 11px;
+    font-weight: 700;
+  }
+
+  .print-pick-item span:last-child {
+    min-width: 52px;
+    height: 14px;
+    border-bottom: 1px solid black;
+  }
+
 }

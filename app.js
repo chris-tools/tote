@@ -1,54 +1,82 @@
-const TOTE_ITEMS = [
-
-{
-    partNumber: "214152",
-    category: "ONT",
-    description: "ONT, ADTRAN, 632 V Indoor XGS 10G/2.5",
-    shorthand: "632",
-    maxQty: 10
-},
-
-{
-    partNumber: "214181",
-    category: "ONT",
-    description: "ADTRAN SDX601QV, GPON 2.5G/1P",
-    shorthand: "601",
-    maxQty: 2
-},
-
-{
-    partNumber: "213567",
-    category: "ONT",
-    description: "ADTRAN SDX611 ONT 1GE C-Chip",
-    shorthand: "611",
-    maxQty: 6
-},
-
-{
-    partNumber: "213484",
+const TOTE_ITEMS = {
+  "204376": {
+    category: "GPON ONT",
+    longName: "ONT-411",
+    shortName: "411"
+  },
+  "213567": {
+    category: "GPON ONT",
+    longName: "ONT-611",
+    shortName: "611"
+  },
+  "214181": {
+    category: "GPON ONT",
+    longName: "ONT-601",
+    shortName: "601"
+  },
+  "213155": {
+    category: "XGSPON ONT",
+    longName: "ONT-622",
+    shortName: "622"
+  },
+  "214152": {
+    category: "XGSPON ONT",
+    longName: "ONT-632",
+    shortName: "632"
+  },
+  "213380": {
     category: "Gateway",
-    description: "ADTRAN 854-6 DHCP",
-    shorthand: "854",
-    maxQty: 9
-},
-
-{
-    partNumber: "214278",
+    longName: "Modem-834",
+    shortName: "834"
+  },
+  "213484": {
     category: "Gateway",
-    description: "ADTRAN, Plume, SDG 8612 Gateway",
-    shorthand: "8612",
-    maxQty: 9
-},
-
-{
-    partNumber: "213264",
+    longName: "Modem-854",
+    shortName: "854"
+  },
+  "213850": {
+    category: "Gateway",
+    longName: "Modem-854 SOS",
+    shortName: "854 SOS"
+  },
+  "214278": {
+    category: "Gateway",
+    longName: "Modem-8612",
+    shortName: "8612"
+  },
+  "214595": {
+    category: "Gateway",
+    longName: "Modem-8612 SOS",
+    shortName: "8612 SOS"
+  },
+  "214802": {
+    category: "Gateway",
+    longName: "Zyxel EE6510",
+    shortName: "Zyxel"
+  },
+  "213264": {
     category: "Extender",
-    description: "Adtran 841-T6 WIFI 6 MESH EXT",
-    shorthand: "841",
-    maxQty: 6
-}
+    longName: "Extender-841",
+    shortName: "841"
+  },
+  "213320": {
+    category: "Extender",
+    longName: "Extender-AX Pod",
+    shortName: "AX Pod"
+  },
+  "213865": {
+    category: "Extender",
+    longName: "Extender-6E",
+    shortName: "6E"
+  }
+};
 
-];
+const CATEGORY_LIMITS = {
+  "GPON ONT": 8,
+  "XGSPON ONT": 10,
+  "Gateway": 18,
+  "Extender": 6
+};
 
 const dropZone = document.getElementById("dropZone");
 const fileInput = document.getElementById("fileInput");
@@ -57,8 +85,6 @@ const generateBtn = document.getElementById("generateBtn");
 const printBtn = document.getElementById("printBtn");
 
 let selectedFile = null;
-let currentPickList = [];
-let currentTotalPieces = 0;
 
 function setLoadedFile(file) {
   selectedFile = file;
@@ -111,8 +137,8 @@ generateBtn.addEventListener("click", () => {
 
     const counts = {};
 
-   TOTE_ITEMS.forEach(item => {
-    counts[item.partNumber] = 0;
+   Object.keys(TOTE_ITEMS).forEach(partNumber => {
+    counts[partNumber] = 0;
 });
 
     for (let i = 1; i < lines.length; i++) {
@@ -132,55 +158,51 @@ generateBtn.addEventListener("click", () => {
       }
     }
 
-    let rows = "";
-    let totalPieces = 0;
-    
-    currentPickList = [];
+    const categoryTotals = {};
 
-    TOTE_ITEMS.forEach((item) => {
-
-    const partNumber = item.partNumber;
-
-      const currentQty = counts[partNumber] || 0;
-      const neededQty = Math.max(0, item.maxQty - currentQty);
-
-      if (neededQty > 0) {
-
-       totalPieces += neededQty;
-        
-      currentPickList.push({
-    item: item.shorthand,
-    max: item.maxQty,
-    current: currentQty,
-    toAdd: neededQty
-});
-
-}
-
-rows += `
-  <tr>
-    <td>${item.shorthand}</td>
-    <td>${item.maxQty}</td>
-    <td>${currentQty}</td>
-    <td>${neededQty}</td>
-  </tr>
-`;
-
+    Object.keys(CATEGORY_LIMITS).forEach((category) => {
+      categoryTotals[category] = 0;
     });
 
-  if (totalPieces === 0) {
+    Object.entries(TOTE_ITEMS).forEach(([partNumber, item]) => {
+      categoryTotals[item.category] += counts[partNumber];
+    });
 
-  resultsDiv.innerHTML = `
-    <div class="result-item">
-      <div class="result-part">
-        Tote is fully stocked
-      </div>
-    </div>
-  `;
+    const inventoryTotal = Object.values(counts).reduce((total, count) => total + count, 0);
 
-  printBtn.disabled = true;
-  return;
-}
+    const inventoryRows = Object.keys(CATEGORY_LIMITS).map((category) => {
+      return Object.entries(TOTE_ITEMS)
+        .filter(([, item]) => item.category === category)
+        .map(([partNumber, item]) => `
+          <tr>
+            <td>${item.shortName}</td>
+            <td>${counts[partNumber]}</td>
+          </tr>
+        `).join("");
+    }).join("");
+
+    const categorySummaries = Object.entries(CATEGORY_LIMITS).map(([category, limit]) => {
+      const currentTotal = categoryTotals[category];
+      const over = Math.max(0, currentTotal - limit);
+      const add = Math.max(0, limit - currentTotal);
+
+      return { category, limit, currentTotal, over, add };
+    });
+
+    const categoryRows = categorySummaries.map(({ category, limit, currentTotal, over, add }) => `
+        <tr>
+          <td>${category}</td>
+          <td>${limit}</td>
+          <td>${currentTotal}</td>
+          <td>${over}</td>
+          <td>${add}</td>
+        </tr>
+      `).join("");
+
+    const categoryMaxTotal = categorySummaries.reduce((total, summary) => total + summary.limit, 0);
+    const categoryCurrentTotal = categorySummaries.reduce((total, summary) => total + summary.currentTotal, 0);
+    const categoryOverTotal = categorySummaries.reduce((total, summary) => total + summary.over, 0);
+    const categoryAddTotal = categorySummaries.reduce((total, summary) => total + summary.add, 0);
 
   const generatedAt = new Date().toLocaleString([], {
   year: "numeric",
@@ -192,29 +214,157 @@ rows += `
 
 resultsDiv.innerHTML = `
   <div class="generated-time">
-    Pick List Generated: ${generatedAt}
+    Summary Generated: ${generatedAt}
   </div>
 
-  <table class="pick-table">
-    <thead>
-     <tr>
-  <th>Item</th>
-<th>Max</th>
-<th>Current</th>
-<th>To Add</th>
-</tr>
-    </thead>
-    <tbody>
-      ${rows}
-    </tbody>
-  </table>
+  <div class="results-grid">
+    <div class="results-panel">
+      <h2>Current Inventory</h2>
+      <table class="pick-table current-inventory-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Current</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${inventoryRows}
+        </tbody>
+      </table>
+      <div class="table-summary inventory-summary">
+        <span>TOTAL:</span>
+        <span>${inventoryTotal}</span>
+      </div>
+    </div>
 
-  <div class="pick-summary">
-    Total Pieces To Pick: ${totalPieces}
+    <div class="results-panel">
+      <h2>Category Summary</h2>
+      <table class="pick-table category-summary-table">
+        <colgroup>
+          <col class="category-column">
+          <col class="numeric-column">
+          <col class="numeric-column">
+          <col class="numeric-column">
+          <col class="numeric-column">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Max</th>
+            <th>Current</th>
+            <th>Over</th>
+            <th>Add</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${categoryRows}
+        </tbody>
+      </table>
+      <div class="table-summary category-summary">
+        <span>TOTAL</span>
+        <span>${categoryMaxTotal}</span>
+        <span>${categoryCurrentTotal}</span>
+        <span>${categoryOverTotal}</span>
+        <span>${categoryAddTotal}</span>
+      </div>
+    </div>
   </div>
 `;
 
-    currentTotalPieces = totalPieces;
+    const existingPrintReport = document.getElementById("printReport");
+
+    if (existingPrintReport) {
+      existingPrintReport.remove();
+    }
+
+    const printReport = document.createElement("div");
+    printReport.id = "printReport";
+    printReport.className = "print-report";
+    printReport.innerHTML = `
+      <h1 class="print-title">TOTE INVENTORY SUMMARY</h1>
+
+      <div class="print-technician">
+        Technician Name: <span></span>
+      </div>
+
+      <div class="print-generated">
+        Summary Generated: ${generatedAt}
+      </div>
+
+      <div class="print-summary-grid">
+        <section class="print-section">
+          <h2>Current Inventory</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Current</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${inventoryRows}
+            </tbody>
+          </table>
+          <div class="print-total print-inventory-total">
+            <span>TOTAL:</span>
+            <span>${inventoryTotal}</span>
+          </div>
+        </section>
+
+        <div class="print-right-column">
+          <section class="print-section">
+            <h2>Category Summary</h2>
+            <table class="print-category-table">
+              <colgroup>
+                <col class="print-category-column">
+                <col class="print-numeric-column">
+                <col class="print-numeric-column">
+                <col class="print-numeric-column">
+                <col class="print-numeric-column">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Max</th>
+                  <th>Current</th>
+                  <th>Over</th>
+                  <th>Add</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${categoryRows}
+              </tbody>
+            </table>
+            <div class="print-total print-category-total">
+              <span>TOTAL</span>
+              <span>${categoryMaxTotal}</span>
+              <span>${categoryCurrentTotal}</span>
+              <span>${categoryOverTotal}</span>
+              <span>${categoryAddTotal}</span>
+            </div>
+          </section>
+
+          <section class="print-pick-section">
+            <h2>Items to Pick</h2>
+            <div class="print-pick-columns">
+              <div>
+                ${["411", "611", "601", "622", "632", "834"].map((name) => `
+                  <div class="print-pick-item"><span>${name}</span><span></span></div>
+                `).join("")}
+              </div>
+              <div>
+                ${["854", "854 SOS", "8612", "8612 SOS", "841"].map((name) => `
+                  <div class="print-pick-item"><span>${name}</span><span></span></div>
+                `).join("")}
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+    `;
+
+    document.body.appendChild(printReport);
     printBtn.disabled = false;
 
   };
@@ -224,93 +374,7 @@ resultsDiv.innerHTML = `
 });
 
 printBtn.addEventListener("click", () => {
+  if (printBtn.disabled) return;
 
-  const { jsPDF } = window.jspdf;
-
-  const doc = new jsPDF();
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(16);
-  doc.text("TOTE REPLENISHMENT PICK LIST", 20, 20);
-
-  doc.text(
-    "Tech Name: ______________________________",
-    20,
-    45
-  );
-
-  const generatedAt = new Date().toLocaleString([], {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit"
-  });
-
-  doc.text(`Generated: ${generatedAt}`, 20, 58);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-
-doc.text("Item", 28, 74);
-doc.text("Pick Quantity", 135, 74);
-doc.text("Pulled", 173, 74);
-doc.line(20, 77, 190, 77);
-
-let y = 80;
-
-doc.setFont("helvetica", "normal");
-
-currentPickList.forEach((row) => {
-
-   // Item name
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(15);
-  doc.text(row.item, 28, y + 2);
-
-   doc.setFontSize(13);
-  doc.text(String(row.toAdd), 145, y + 2);
-
-
-    // Checkbox
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
-  doc.rect(178, y - 1.5, 4, 4);
-
-    doc.setDrawColor(150);
-
-doc.line(20, y + 5, 190, y + 5);
-
-doc.setDrawColor(0);
-
-  // Next row
-  y += 10;
-    
-});
-
-doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
-
-doc.rect(135, y + 5, 50, 12);
-
-doc.text(
-  `Total Pieces: ${currentTotalPieces}`,
-  140,
-  y + 13
-);
-
-const pdfUrl = URL.createObjectURL(doc.output("blob"));
-const printFrame = document.createElement("iframe");
-
-printFrame.style.display = "none";
-printFrame.src = pdfUrl;
-printFrame.onload = () => {
-  printFrame.contentWindow.addEventListener("afterprint", () => {
-    URL.revokeObjectURL(pdfUrl);
-    printFrame.remove();
-  }, { once: true });
-  printFrame.contentWindow.print();
-};
-
-document.body.appendChild(printFrame);
-
+  window.print();
 });
