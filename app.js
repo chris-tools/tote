@@ -29,7 +29,7 @@ const TOTE_ITEMS = [
     category: "Gateway",
     description: "ADTRAN 854-6 DHCP",
     shorthand: "854",
-    maxQty: 8
+    maxQty: 10
 },
 
 {
@@ -37,15 +37,7 @@ const TOTE_ITEMS = [
     category: "Gateway",
     description: "ADTRAN, Plume, SDG 8612 Gateway",
     shorthand: "8612",
-    maxQty: 8
-},
-
-{
-    partNumber: "214802",
-    category: "Gateway",
-    description: "Zyxel EE6510-10 Wifi7",
-    shorthand: "Zyxel 6510",
-    maxQty: 2
+    maxQty: 10
 },
 
 {
