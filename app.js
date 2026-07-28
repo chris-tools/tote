@@ -29,7 +29,7 @@ const TOTE_ITEMS = [
     category: "Gateway",
     description: "ADTRAN 854-6 DHCP",
     shorthand: "854",
-    maxQty: 10
+    maxQty: 9
 },
 
 {
@@ -37,7 +37,7 @@ const TOTE_ITEMS = [
     category: "Gateway",
     description: "ADTRAN, Plume, SDG 8612 Gateway",
     shorthand: "8612",
-    maxQty: 10
+    maxQty: 9
 },
 
 {
