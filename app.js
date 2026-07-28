@@ -17,6 +17,14 @@ const TOTE_ITEMS = [
 },
 
 {
+    partNumber: "214181",
+    category: "ONT",
+    description: "ADTRAN 411 MICRO ONT",
+    shorthand: "411",
+    maxQty: 0
+},
+    
+{
     partNumber: "213567",
     category: "ONT",
     description: "ADTRAN SDX611 ONT 1GE C-Chip",
