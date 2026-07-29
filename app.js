@@ -2,72 +2,77 @@ const TOTE_ITEMS = {
   "204376": {
     category: "GPON ONT",
     longName: "ONT-411",
-    shortName: "411"
+    shortName: "GPON-411"
   },
   "213567": {
     category: "GPON ONT",
     longName: "ONT-611",
-    shortName: "611"
+    shortName: "GPON-611"
+  },
+   "213566": {
+    category: "GSPON ONT",
+    longName: "ONT-611",
+    shortName: "GSPON-611 Obsolete"
   },
   "214181": {
     category: "GPON ONT",
     longName: "ONT-601",
-    shortName: "601"
+    shortName: "GPON-601"
   },
   "213155": {
     category: "XGSPON ONT",
     longName: "ONT-622",
-    shortName: "622"
+    shortName: "XGSPON-622"
   },
-  "214152": {
+   "214152": {
     category: "XGSPON ONT",
     longName: "ONT-632",
-    shortName: "632"
+    shortName: "XGSPON-632"
   },
   "213380": {
     category: "Gateway",
     longName: "Modem-834",
-    shortName: "834"
+    shortName: "Gateway-834"
   },
   "213484": {
     category: "Gateway",
     longName: "Modem-854",
-    shortName: "854"
+    shortName: "Gateway-854"
   },
   "213850": {
     category: "Gateway",
     longName: "Modem-854 SOS",
-    shortName: "854 SOS"
+    shortName: "Gateway-854 SOS"
   },
   "214278": {
     category: "Gateway",
     longName: "Modem-8612",
-    shortName: "8612"
+    shortName: "Gateway-8612"
   },
   "214595": {
     category: "Gateway",
     longName: "Modem-8612 SOS",
-    shortName: "8612 SOS"
+    shortName: "Gateway-8612 SOS"
   },
   "214802": {
     category: "Gateway",
     longName: "Zyxel EE6510",
-    shortName: "Zyxel"
+    shortName: "Gateway-Zyxel 6510"
   },
   "213264": {
     category: "Extender",
     longName: "Extender-841",
-    shortName: "841"
+    shortName: "Extender-841"
   },
   "213320": {
     category: "Extender",
     longName: "Extender-AX Pod",
-    shortName: "AX Pod"
+    shortName: "Extender-AX Pod"
   },
   "213865": {
     category: "Extender",
     longName: "Extender-6E",
-    shortName: "6E"
+    shortName: "Extender-6E"
   }
 };
 
