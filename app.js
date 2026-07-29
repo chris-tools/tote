@@ -7,7 +7,7 @@ const TOTE_ITEMS = {
   "213567": {
     category: "GPON ONT",
     longName: "ONT-611",
-    shortName: "611 213567"
+    shortName: "611"
   },
    "213566": {
     category: "GSPON ONT",
