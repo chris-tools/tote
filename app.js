@@ -83,8 +83,17 @@ const fileInput = document.getElementById("fileInput");
 const fileStatus = document.getElementById("fileStatus");
 const generateBtn = document.getElementById("generateBtn");
 const printBtn = document.getElementById("printBtn");
+const technicianNameInput = document.getElementById("technicianName");
+const resultsDiv = document.getElementById("results");
 
 let selectedFile = null;
+let summaryGenerated = false;
+
+function updatePrintButtonState() {
+  printBtn.disabled = !summaryGenerated || !technicianNameInput.value.trim();
+}
+
+technicianNameInput.addEventListener("input", updatePrintButtonState);
 
 function setLoadedFile(file) {
   selectedFile = file;
@@ -92,7 +101,18 @@ function setLoadedFile(file) {
   fileStatus.textContent = file.name;
   fileStatus.classList.add("file-loaded");
 
+  technicianNameInput.value = "";
+  resultsDiv.innerHTML = "";
+  summaryGenerated = false;
+
+  const existingPrintReport = document.getElementById("printReport");
+
+  if (existingPrintReport) {
+    existingPrintReport.remove();
+  }
+
   generateBtn.disabled = false;
+  updatePrintButtonState();
 }
 
 dropZone.addEventListener("click", () => {
@@ -120,8 +140,6 @@ dropZone.addEventListener("drop", (event) => {
 
   setLoadedFile(file);
 });
-
-const resultsDiv = document.getElementById("results");
 
 generateBtn.addEventListener("click", () => {
 
@@ -198,6 +216,16 @@ generateBtn.addEventListener("click", () => {
           <td>${add}</td>
         </tr>
       `).join("");
+
+    const printCategoryColgroup = `
+      <colgroup>
+        <col class="print-category-column">
+        <col class="print-numeric-column">
+        <col class="print-numeric-column print-current-column">
+        <col class="print-numeric-column">
+        <col class="print-numeric-column">
+      </colgroup>
+    `;
 
     const categoryMaxTotal = categorySummaries.reduce((total, summary) => total + summary.limit, 0);
     const categoryCurrentTotal = categorySummaries.reduce((total, summary) => total + summary.currentTotal, 0);
@@ -315,13 +343,7 @@ resultsDiv.innerHTML = `
           <section class="print-section">
             <h2>Category Summary</h2>
             <table class="print-category-table">
-              <colgroup>
-                <col class="print-category-column">
-                <col class="print-numeric-column">
-                <col class="print-numeric-column">
-                <col class="print-numeric-column">
-                <col class="print-numeric-column">
-              </colgroup>
+              ${printCategoryColgroup}
               <thead>
                 <tr>
                   <th>Category</th>
@@ -335,13 +357,18 @@ resultsDiv.innerHTML = `
                 ${categoryRows}
               </tbody>
             </table>
-            <div class="print-total print-category-total">
-              <span>TOTAL</span>
-              <span>${categoryMaxTotal}</span>
-              <span>${categoryCurrentTotal}</span>
-              <span>${categoryOverTotal}</span>
-              <span>${categoryAddTotal}</span>
-            </div>
+            <table class="print-total print-category-total">
+              ${printCategoryColgroup}
+              <tbody>
+                <tr>
+                  <td>TOTAL</td>
+                  <td>${categoryMaxTotal}</td>
+                  <td>${categoryCurrentTotal}</td>
+                  <td>${categoryOverTotal}</td>
+                  <td>${categoryAddTotal}</td>
+                </tr>
+              </tbody>
+            </table>
           </section>
 
           <section class="print-pick-section">
@@ -365,7 +392,8 @@ resultsDiv.innerHTML = `
     `;
 
     document.body.appendChild(printReport);
-    printBtn.disabled = false;
+    summaryGenerated = true;
+    updatePrintButtonState();
 
   };
 
@@ -375,6 +403,9 @@ resultsDiv.innerHTML = `
 
 printBtn.addEventListener("click", () => {
   if (printBtn.disabled) return;
+
+  const printTechnicianName = document.querySelector("#printReport .print-technician span");
+  printTechnicianName.textContent = technicianNameInput.value;
 
   window.print();
 });
