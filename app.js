@@ -19,6 +19,11 @@ const TOTE_ITEMS = {
     longName: "ONT-622",
     shortName: "622"
   },
+  "213566": {
+    category: "GSPON ONT",
+    longName: "ONT-611",
+    shortName: "611 Obsolete"
+  },
   "214152": {
     category: "XGSPON ONT",
     longName: "ONT-632",
