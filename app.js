@@ -54,16 +54,16 @@ const TOTE_ITEMS = {
     longName: "Modem-8612 SOS",
     shortName: "Gateway-8612 SOS"
   },
+  "214570": {
+    category: "Gateway",
+    longName: "Zyxel EX5512",
+    shortName: "Gateway-Zyxel 5512"  
+  },
   "214802": {
     category: "Gateway",
     longName: "Zyxel EE6510",
     shortName: "Gateway-Zyxel 6510"
-  },
-  "214570": {
-    category: "Gateway",
-    longName: "Zyxel EX5512",
-    shortName: "Gateway-Zyxel 5512"
-  },
+    },
   "213264": {
     category: "Extender",
     longName: "Extender-841",
