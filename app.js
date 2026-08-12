@@ -59,6 +59,11 @@ const TOTE_ITEMS = {
     longName: "Zyxel EE6510",
     shortName: "Gateway-Zyxel 6510"
   },
+  "214570": {
+    category: "Gateway",
+    longName: "Zyxel EX5512",
+    shortName: "Gateway-Zyxel 5512"
+  },
   "213264": {
     category: "Extender",
     longName: "Extender-841",
@@ -385,7 +390,7 @@ resultsDiv.innerHTML = `
                 `).join("")}
               </div>
               <div>
-                ${["854", "854 SOS", "8612", "8612 SOS", "841"].map((name) => `
+                ${["854", "854 SOS", "5512", "8612", "6510", "8612 SOS", "841"].map((name) => `
                   <div class="print-pick-item"><span>${name}</span><span></span></div>
                 `).join("")}
               </div>
