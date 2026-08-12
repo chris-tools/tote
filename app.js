@@ -83,6 +83,24 @@ const CATEGORY_LIMITS = {
   "Extender": 6
 };
 
+const TOTE_DISPLAY_ORDER = [
+  "204376", // 411
+  "213567", // 611
+  "214181", // 601
+  "213155", // 622
+  "214152", // 632
+  "213380", // 834
+  "213484", // 854
+  "213850", // 854 SOS
+  "214278", // 8612
+  "214595", // 8612 SOS
+  "214570", // Zyxel 5512
+  "214802", // Zyxel 6510
+  "213264", // 841
+  "213320", // AX Pod
+  "213865"  // 6E
+];
+
 const dropZone = document.getElementById("dropZone");
 const fileInput = document.getElementById("fileInput");
 const fileStatus = document.getElementById("fileStatus");
@@ -194,8 +212,9 @@ generateBtn.addEventListener("click", () => {
     const inventoryTotal = Object.values(counts).reduce((total, count) => total + count, 0);
 
     const inventoryRows = Object.keys(CATEGORY_LIMITS).map((category) => {
-      return Object.entries(TOTE_ITEMS)
-        .filter(([, item]) => item.category === category)
+  return TOTE_DISPLAY_ORDER
+    .map((partNumber) => [partNumber, TOTE_ITEMS[partNumber]])
+    .filter(([, item]) => item.category === category)
         .map(([partNumber, item]) => `
           <tr>
             <td>${item.shortName}</td>
