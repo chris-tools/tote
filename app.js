@@ -29,11 +29,6 @@ const TOTE_ITEMS = {
     longName: "ONT-632",
     shortName: "XGSPON-632"
   },
-  "213380": {
-    category: "Gateway",
-    longName: "Modem-834",
-    shortName: "Gateway-834"
-  },
   "213484": {
     category: "Gateway",
     longName: "Modem-854",
@@ -385,12 +380,12 @@ resultsDiv.innerHTML = `
             <h2>Items to Pick</h2>
             <div class="print-pick-columns">
               <div>
-                ${["411", "611", "601", "622", "632", "834"].map((name) => `
+                ${["411", "611", "601", "622", "632", "841"].map((name) => `
                   <div class="print-pick-item"><span>${name}</span><span></span></div>
                 `).join("")}
               </div>
               <div>
-                ${["854", "854 SOS", "5512", "8612", "6510", "8612 SOS", "841"].map((name) => `
+                ${["854", "854 SOS", "5512", "8612", "6510", "8612 SOS"].map((name) => `
                   <div class="print-pick-item"><span>${name}</span><span></span></div>
                 `).join("")}
               </div>
