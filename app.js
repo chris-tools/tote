@@ -54,6 +54,11 @@ const TOTE_ITEMS = {
     longName: "Zyxel EX5512",
     shortName: "Gateway-Zyxel 5512"  
   },
+  "214250": {
+    category: "Gateway",
+    longName: "Zyxel EX5512",
+    shortName: "Gateway-Zyxel 5512"  
+  },
   "214802": {
     category: "Gateway",
     longName: "Zyxel EE6510",
